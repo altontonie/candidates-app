@@ -1,0 +1,5 @@
+server:
+  port: 4545
+spring:
+  application:
+    name: demo candidate app
