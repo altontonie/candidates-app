@@ -40,5 +40,40 @@ public class CandidateServiceImpl implements CandidateService {
         return candidates;
     }
 
+    @Override
+    public List<Candidate> getAllCandidates() throws ExecutionException, InterruptedException {
 
+        List<Candidate> candidates = new ArrayList<>();
+        Firestore dbFirestore = FirestoreClient.getFirestore();
+        ApiFuture<QuerySnapshot> future = dbFirestore.collection("User").get();
+        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        for (QueryDocumentSnapshot document : documents) {
+            System.out.println(document.getId() + " => " + document.toObject(Candidate.class));
+            candidates.add(document.toObject(Candidate.class));
+        }
+        return candidates;
+    }
+
+    @Override
+    public String addCandidate(Candidate candidate) throws ExecutionException, InterruptedException {
+        candidate.setUserId(UUID.randomUUID().toString().substring(0,13));
+        Firestore firestore = FirestoreClient.getFirestore();
+        ApiFuture<WriteResult> collectionApiFuture = firestore.collection("User").document(candidate.getUserId()).set(candidate);
+        return collectionApiFuture.get().getUpdateTime().toString();
+    }
+
+    @Override
+    public String updateCandidate(Candidate candidate) throws ExecutionException, InterruptedException {
+        Firestore firestore = FirestoreClient.getFirestore();
+        ApiFuture<WriteResult> collectionApiFuture = firestore.collection("User").document(candidate.getUserId()).set(candidate);
+        return collectionApiFuture.get().getUpdateTime().toString();
+    }
+
+    @Override
+    public String deleteCandidate(String id) {
+
+        Firestore firestore = FirestoreClient.getFirestore();
+        ApiFuture<WriteResult> writeResult = firestore.collection("User").document(id).delete();
+        return "Successful";
+    }
 }
