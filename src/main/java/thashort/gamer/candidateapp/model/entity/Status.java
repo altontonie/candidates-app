@@ -1,4 +1,4 @@
-package thashort.gamer.cantidateapp.model.entity;
+package thashort.gamer.candidateapp.model.entity;
 
 import lombok.Data;
 
