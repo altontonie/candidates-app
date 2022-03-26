@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class Candidate {
-    private long id;
     private String userId;
     private String mobileNumber;
     private String firstName;
